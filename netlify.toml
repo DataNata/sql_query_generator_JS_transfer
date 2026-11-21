@@ -1,0 +1,21 @@
+# Настройки Netlify. Сборки нет: сайт — готовые файлы из public/,
+# API — функции из netlify/functions/, «охранник» входа — netlify/edge-functions/auth.mjs.
+
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+  edge_functions = "netlify/edge-functions"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "same-origin"
+    Cache-Control = "no-store"

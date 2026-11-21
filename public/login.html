@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вход · SQL Query Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="login-page">
+    <form class="card login-card" method="post" action="/api/login">
+      <span class="pill">SQL Generator · LLM · Mermaid ER</span>
+      <h1>Вход</h1>
+      <p class="muted">Введите пароль, чтобы открыть SQL Query Generator.</p>
+      <div class="error" id="loginError" hidden></div>
+      <label class="field-label" for="password">Пароль</label>
+      <input class="login-input" type="password" id="password" name="password"
+             autocomplete="current-password" required autofocus>
+      <button type="submit" class="btn-primary">Войти</button>
+    </form>
+  </main>
+  <script>
+    // Ошибку входа передаёт /api/login через параметры адреса
+    (function () {
+      var q = new URLSearchParams(location.search), box = document.getElementById("loginError"), msg = "";
+      if (q.get("error") === "wrong") msg = "Неверный пароль";
+      if (q.get("error") === "locked") {
+        var until = new Date(Number(q.get("until")));
+        msg = "Слишком много неверных попыток. Вход заблокирован" +
+          (isNaN(until) ? " на 15 минут" : " до " + until.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" }));
+      }
+      if (msg) { box.textContent = msg; box.hidden = false; }
+    })();
+  </script>
+</body>
+</html>
